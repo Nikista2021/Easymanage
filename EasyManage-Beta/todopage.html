@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <script src="assets/js/app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+    <script>
+    import {
+        getDatabase,
+        set,
+        ref,
+        push,
+        child,
+        onValue,
+        onChildAdded
+    } from "https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js";
+   </script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="assets/js/firebase.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <!-- To-do list -->
+    <div class="loginnavbar">
+        <div class="loginnavbar-continer">
+            <div class="loginnavbar-content1">
+                <a href="http://" id="logo"><img src="assets/images/logo.png" alt=""></a>
+            </div>
+            <div class="loginnavbar-content2">
+
+
+            </div>
+        </div>
+    </div>
+
+    <section class="firstTodo">
+        <div class="todo-container">
+            <div class="todocontent">
+                <div class="todo-content1">
+                    <div class="check">
+                        <div class="check-mark">
+
+                        </div>
+                    </div>
+
+                    <div class="new-todo-input">
+                        <form onsubmit="addItem(event)">
+                            <input id="todo-input" type="text" placeholder="Create a new task....">
+                        </form>
+                    </div>
+                </div>
+                <div class="todo-items-wrapper">
+                    <div class="todo-items">
+                        <div class="todo-item">
+                            <div class="check">
+                                <div class="check-mark checked">
+                                   <img src="assets/images/icon-check.svg" alt="">
+                                </div>
+                            </div>
+                            <div class="todo-text checked">
+                                lol
+                            </div>
+                        </div>
+                        <div class="todo-item">
+                            <div class="check">
+                                <div class="check-mark">
+                                   
+                                </div>
+                            </div>
+                            <div class="todo-text">
+                                lol
+                            </div>
+                        </div>
+                        <div class="todo-item">
+                            <div class="check">
+                                <div class="check-mark">
+                                   
+                                </div>
+                            </div>
+                            <div class="todo-text">
+                                lol
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-items-info">
+
+                    </div>
+                </div>
+                <!-- <div class="addbutton">
+                    <img src="assets/images/addbutton.png" alt="">
+                </div> -->
+            </div>
+            <div class="message">
+                <div class="message-body" id="bodyContent" >
+                    
+                </div>
+                <div class="send-message">
+                    <input type="text" id="message" placeholder="Type your message.. ">
+                    <input type="button" class="button" id="submit" value="Send">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+        import {
+        getDatabase,
+        set,
+        ref,
+        push,
+        child,
+        onValue,
+        onChildAdded
+        } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB9xJTQPeuNGLXpRUUP1UJ9Uvsn0SaYXts",
+          authDomain: "to-do-99308.firebaseapp.com",
+          databaseURL: "https://to-do-99308-default-rtdb.firebaseio.com",
+          projectId: "to-do-99308",
+          storageBucket: "to-do-99308.appspot.com",
+          messagingSenderId: "155862218990",
+          appId: "1:155862218990:web:a6b43528b8ff5c6cd61bff"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        var myName = prompt("Enter your name");
+
+    submit.addEventListener('click', (e) => {
+        var message = document.getElementById('message').value;
+        var name = myName;
+
+        const id = push(child(ref(database), 'messages')).key;
+
+        set(ref(database, 'messages/' + id), {
+            name: name,
+            message: message
+        });
+        document.getElementById('message').value = "";
+        alert('message has sent');
+
+    });
+
+    const newMsg = ref(database, 'messages/');
+    onChildAdded(newMsg, (data) => {
+        if(data.val().name != myName) {
+            var divData = '<div class="d-flex justify-content-start mb-4" id="fromDiv">\n' +
+                '                        <div class="img_cont_msg">\n' +
+                '                            <img src=""\n' +
+                '                                 class="rounded-circle user_img_msg">\n' +
+                '                        </div>\n' +
+                '                        <div class="msg_cotainer" >\n' +
+                '                            '+data.val().message+'' +
+                '                            <span class="msg_time"></span>\n' +
+                '                        </div>\n' +
+                '                    </div>';
+                var d1 = document.getElementById('bodyContent');
+            d1.insertAdjacentHTML('beforebegin', divData);
+        }else{
+            var divData = '<div class="d-flex justify-content-end mb-4">\n' +
+                '                        <div class="msg_cotainer_send" id="sendDiv">\n' +
+                '                            '+data.val().message+'' +
+                '                            \n' +
+                '                        </div>\n' +
+                '                        <div class="img_cont_msg">\n' +
+                '                            <img src=""\n' +
+                '                                 class="rounded-circle user_img_msg">\n' +
+                '                        </div>\n' +
+                '                    </div>';
+            var d1 = document.getElementById('bodyContent');
+            d1.insertAdjacentHTML('beforebegin', divData);
+        }
+    });
+    </script>
+
+</body>
+</html>

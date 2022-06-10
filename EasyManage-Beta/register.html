@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png">
@@ -17,15 +17,107 @@
             </div>
             <h1>Sign up to Easy Manage</h1> 
             <div class="form">
-                <div class="input-field"><input type="text" placeholder="Full Name" class="validate"></div>
-                <div class="input-field"><input type="email"placeholder="Email" class="validate"></div>
-                <div class="input-field"><input type="password" placeholder="Password" class="validate"></div> 
-                <div class="input-field"><input type="password"placeholder="re-enter password" class="validate"></div>
+                <div class="input-field"><input type="text" placeholder="Full Name" id="username" class="validate"></div>
+                <div class="input-field"><input type="email"placeholder="Email" id="email" class="validate"></div>
+                <div class="input-field"><input type="password" placeholder="Password" id="password" class="validate"></div> 
+                <div class="input-field"><input type="password"placeholder="re-enter password" id="password" class="validate"></div>
                 <div class="login-button">
-                    <button class="second-button">Sign up</button>
+                    <button class="second-button" id="signUp">Sign up</button>
                 </div>    
             </div>
         </div>
     </div>
 </body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9xJTQPeuNGLXpRUUP1UJ9Uvsn0SaYXts",
+      authDomain: "to-do-99308.firebaseapp.com",
+      databaseURL: "https://to-do-99308-default-rtdb.firebaseio.com",
+      projectId: "to-do-99308",
+      storageBucket: "to-do-99308.appspot.com",
+      messagingSenderId: "155862218990",
+      appId: "1:155862218990:web:d200126930e4cf6bd61bff"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
+
+signUp.addEventListener('click',(e) => {
+
+var email = document.getElementById('email').value;
+var password = document.getElementById('password').value;
+var username = document.getElementById('username').value;
+
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+   // Signed in 
+    const user = userCredential.user;
+
+    set(ref(database, 'users/' + user.uid),{
+        username: username,
+        email: email
+    })
+
+    window. location. href = "/login.html";
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+
+    alert(errorMessage);
+  // ..
+  });
+
+});
+
+login.addEventListener('click',(e)=>{
+   var email = document.getElementById('email').value;
+   var password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+
+        const dt = new Date();
+         update(ref(database, 'users/' + user.uid),{
+          last_login: dt,
+        })
+
+        window. location. href = "/projectRequest.html";
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+  });
+
+ });
+
+ const user = auth.currentUser;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+
+  } else {
+
+  }
+});
+
+  </script>
 </html>
